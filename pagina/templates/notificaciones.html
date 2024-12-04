@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Notificaciones{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-bell"></i> Mis Notificaciones
+                </h2>
+            </div>
+            <div class="card-body">
+                {% if notificaciones %}
+                    <ul class="list-group">
+                        {% for notificacion in notificaciones %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center 
+                                {% if notificacion.leida %}list-group-item-success{% else %}list-group-item-warning{% endif %}">
+                                <div>
+                                    <i class="fas {% if notificacion.leida %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} me-2"></i>
+                                    <strong>{{ notificacion.tipo|capfirst }}</strong> - 
+                                    <i class="fas fa-comment-alt me-1"></i>{{ notificacion.tema.titulo }} 
+                                    <i class="fas fa-user me-1"></i>{{ notificacion.autor.username }}
+                                </div>
+                                <span class="badge bg-secondary rounded-pill">
+                                    <i class="far fa-clock me-1"></i>
+                                    {{ notificacion.fecha_creacion|date:"d M Y, H:i" }}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No tienes notificaciones nuevas.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

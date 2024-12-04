@@ -1,0 +1,149 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container">
+  <h2>Panel de Administración</h2>
+
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <a class="nav-link active" href="#categorias" data-bs-toggle="tab"
+        >Categorías</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#usuarios" data-bs-toggle="tab">Usuarios</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#moderacion" data-bs-toggle="tab"
+        >Listado De Posts</a
+      >
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- Gestión de Categorías -->
+    <div class="tab-pane fade show active" id="categorias">
+      <div class="card p-4">
+        <h3>Gestión de Categorías</h3>
+        <p>Crear y gestionar categorías para organizar las conversaciones</p>
+
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar categorías..."
+          />
+        </div>
+
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th>Nombre de la Categoría</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for categoria in categorias %}
+            <tr>
+              <td>{{ categoria.nombre }}</td>
+              <td>
+                <a
+                  href="{% url 'editar_categoria' categoria.id %}"
+                  class="text-decoration-none me-3"
+                >
+                  <i class="fas fa-edit"></i> Editar
+                </a>
+                <a
+                  href="{% url 'eliminar_categoria' categoria.id %}"
+                  class="text-danger text-decoration-none"
+                >
+                  <i class="fas fa-trash"></i> Eliminar
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="2">No hay categorías disponibles.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="text-end mt-3">
+          <a href="{% url 'crear_categoria' %}" class="btn btn-dark">
+            <i class="fas fa-plus-circle"></i> Crear Nueva Categoría
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gestión de Usuarios -->
+    <div class="tab-pane fade" id="usuarios">
+      <div class="card p-4">
+        <h3>Gestión de Usuarios</h3>
+        <p>Visualiza y gestiona los usuarios registrados en la plataforma</p>
+
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th>Nombre de Usuario</th>
+              <th>Email</th>
+              <th>Fecha de Registro</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+              <td>{{ usuario.username }}</td>
+              <td>{{ usuario.email }}</td>
+              <td>{{ usuario.fecha_registro|date:"d M Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4">No hay usuarios disponibles.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Moderación -->
+    <div class="tab-pane fade" id="moderacion">
+      <div class="card p-4">
+        <h3>Listado de Posts</h3>
+        <p>Visualiza y gestiona los posts publicados en la plataforma</p>
+
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th>Título del Post</th>
+              <th>Autor</th>
+              <th>Fecha de Publicación</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for post in posts %}
+            <tr>
+              <td>{{ post.titulo }}</td>
+              <td>{{ post.autor.username }}</td>
+              <td>{{ post.fecha_creacion|date:"d M Y" }}</td>
+              <td>
+                <a
+                  href="{% url 'eliminar_post' post.id %}"
+                  class="text-danger text-decoration-none"
+                >
+                  <i class="fas fa-trash"></i> Eliminar
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4">No hay posts disponibles.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

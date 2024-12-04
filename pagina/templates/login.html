@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Por favor, corrige los siguientes errores:
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-4">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user me-2"></i>Nombre de usuario
+                            </label>
+                            <input type="text" 
+                                   name="username" 
+                                   class="form-control form-control-lg" 
+                                   id="username" 
+                                   required>
+                            {{ form.username.errors }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Contraseña
+                            </label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-control form-control-lg" 
+                                       id="password" 
+                                       required>
+                                <button class="btn btn-outline-secondary" 
+                                        type="button" 
+                                        onclick="togglePassword()">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            {{ form.password.errors }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input" 
+                                       id="remember-me" 
+                                       name="remember">
+                                <label class="form-check-label" for="remember-me">
+                                    <i class="fas fa-clock me-2"></i>Mantener sesión iniciada
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="text-center">
+                        <p class="mb-0">
+                            <i class="fas fa-user-plus me-2"></i>
+                            ¿No tienes una cuenta? 
+                            <a href="{% url 'registro' %}" class="text-primary">Regístrate</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const icon = document.querySelector('.fa-eye');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+{% endblock %}

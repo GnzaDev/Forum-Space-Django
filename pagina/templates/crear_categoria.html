@@ -1,0 +1,98 @@
+<!-- crear_categoria.html -->
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-folder-plus me-2"></i>Crear Nueva Categoría
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group mb-4">
+                            {{ form.as_p|safe }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success custom-btn">
+                                <i class="fas fa-check-circle me-2"></i>Crear Categoría
+                            </button>
+                            <a href="{% url 'admin_panel' %}" class="btn btn-secondary custom-btn">
+                                <i class="fas fa-arrow-left me-2"></i>Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        border: none;
+    }
+    
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .card-title {
+        color: #2c3e50;
+        font-size: 1.5rem;
+    }
+    
+    .form-group label {
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .custom-btn {
+        padding: 12px 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success.custom-btn {
+        background-color: #28a745;
+        border: none;
+    }
+    
+    .btn-success.custom-btn:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+    
+    .btn-secondary.custom-btn {
+        background-color: #6c757d;
+        border: none;
+        margin-top: 10px;
+    }
+    
+    .btn-secondary.custom-btn:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+</style>
+{% endblock %}

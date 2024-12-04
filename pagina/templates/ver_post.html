@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="post-header d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h2>{{ post.titulo }}</h2>
+            <p><small class="text-muted">Creado por {{ post.autor }} - {{ post.fecha_creacion }}</small></p>
+        </div>
+        <!-- Botón de Like reubicado -->
+        <div class="like-section">
+            <a href="{% url 'dar_like' post.id %}" class="like-button {% if request.user in post.likes.all %}liked{% endif %}" title="Me gusta">
+                <i class="fas fa-heart"></i>
+                <span class="like-count ms-2">{{ post.likes.count }}</span>
+            </a>
+        </div>
+    </div>
+    
+    <p>{{ post.contenido }}</p>
+    <hr>
+
+    <h4>Respuestas:</h4>
+    <div class="list-group">
+        {% for respuesta in post.respuesta_set.all %}
+        <div class="list-group-item">
+            <h5>{{ respuesta.autor }}</h5>
+            <p>{{ respuesta.contenido }}</p>
+            <small class="text-muted">{{ respuesta.fecha_creacion|timesince }} ago</small>
+        </div>
+        {% empty %}
+        <div class="alert alert-info" role="alert">
+            No hay respuestas en este Post.
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Formulario para agregar una nueva respuesta -->
+    <form method="POST" action="{% url 'ver_post' post.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <textarea class="form-control" name="contenido" rows="3" placeholder="Escribe una respuesta..." {% if not user.is_authenticated %}readonly{% endif %} required></textarea>
+        </div>
+        {% if not user.is_authenticated %}
+            <div class="alert alert-warning" role="alert">
+                Necesitas iniciar sesión para agregar una respuesta.
+            </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary custom-btn" {% if not user.is_authenticated %}disabled{% endif %}>
+            <i class="fas fa-reply me-2"></i>Agregar Respuesta
+        </button>
+    </form>
+
+    <!-- Botón para eliminar la publicación (solo si es el autor) -->
+    <hr>
+    {% if post.autor == request.user %}
+    <a href="{% url 'eliminar_post' post.id %}" class="btn btn-danger custom-btn">
+        <i class="fas fa-trash-alt me-2"></i>Eliminar Publicación
+    </a>
+    {% endif %}
+</div>
+{% endblock %}
+
+

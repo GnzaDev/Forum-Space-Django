@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Crear Publicación</h2>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'crear_post' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="titulo" class="form-label fw-bold">Título</label>
+                            <input type="text" class="form-control form-control-lg" id="titulo" name="titulo" required>
+                            <div class="invalid-feedback">
+                                Por favor ingresa un título
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="contenido" class="form-label fw-bold">Contenido</label>
+                            <textarea class="form-control" id="contenido" name="contenido" rows="8" required></textarea>
+                            <div class="invalid-feedback">
+                                Por favor ingresa el contenido
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="categoria" class="form-label fw-bold">Categoría</label>
+                            <select class="form-select form-select-lg" id="categoria" name="categoria" required>
+                                <option value="">Selecciona una categoría</option>
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor selecciona una categoría
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus-circle me-2"></i>Crear Publicación
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agregar este script al final -->
+<script>
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
+</script>
+{% endblock %}

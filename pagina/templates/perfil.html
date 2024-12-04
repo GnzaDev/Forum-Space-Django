@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-user-circle"></i> Mi Perfil
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}" alt="Avatar" class="rounded-circle img-thumbnail mb-3 shadow-sm" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mb-3 mx-auto shadow-sm" style="width: 150px; height: 150px;">
+                                    <i class="fas fa-user-circle fa-5x text-primary"></i>
+                                </div>
+                            {% endif %}
+                            <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-2" data-bs-toggle="modal" data-bs-target="#cambiarAvatarModal">
+                                <i class="fas fa-camera"></i> Cambiar Avatar
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm w-100" data-bs-toggle="modal" data-bs-target="#eliminarCuentaModal">
+                                <i class="fas fa-trash-alt"></i> Eliminar Cuenta
+                            </button>
+                        </div>
+                        <div class="col-md-8">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">
+                                        <i class="fas fa-user"></i> Nombre de usuario
+                                    </label>
+                                    <input type="text" class="form-control bg-light" id="username" value="{{ user.username }}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope"></i> Correo electrónico
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="old_password" class="form-label">
+                                        <i class="fas fa-lock"></i> Contraseña Actual
+                                    </label>
+                                    <input type="password" class="form-control" id="old_password" name="old_password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="new_password" class="form-label">
+                                        <i class="fas fa-key"></i> Nueva Contraseña
+                                    </label>
+                                    <input type="password" class="form-control" id="new_password" name="new_password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label">
+                                        <i class="fas fa-check-circle"></i> Confirmar Nueva Contraseña
+                                    </label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Guardar Cambios
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas del usuario -->
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card shadow text-center">
+                        <div class="card-body">
+                            <i class="fas fa-file-alt fa-2x text-primary mb-2"></i>
+                            <h5 class="card-title">Posts</h5>
+                            <p class="display-4">{{ user.post_set.count }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow text-center">
+                        <div class="card-body">
+                            <i class="fas fa-reply fa-2x text-primary mb-2"></i>
+                            <h5 class="card-title">Respuestas</h5>
+                            <p class="display-4">{{ user.respuesta_set.count }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow text-center">
+                        <div class="card-body">
+                            <i class="fas fa-heart fa-2x text-primary mb-2"></i>
+                            <h5 class="card-title">Likes</h5>
+                            <p class="display-4">{{ user.posts_liked.count }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para cambiar avatar -->
+<div class="modal fade" id="cambiarAvatarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-camera"></i> Cambiar Avatar
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" action="">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">
+                            <i class="fas fa-image"></i> Selecciona una imagen
+                        </label>
+                        <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Subir Avatar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para confirmar eliminación de cuenta -->
+<div class="modal fade" id="eliminarCuentaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i> Eliminar Cuenta
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <i class="fas fa-exclamation-circle text-danger"></i>
+                ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <form method="post" action="{% url 'eliminar_cuenta' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
